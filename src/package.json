@@ -1,0 +1,10 @@
+{
+    "name": "OrbNet",
+    "version": "1.0.0",
+    "description": "JFF discord bot",
+    "main": "bot.js",
+    "author": {
+        "name": "ExpletoryOrb"
+    },
+    "dependencies": {}
+}
