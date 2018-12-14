@@ -1,0 +1,13 @@
+{
+    "name": "OrbNet",
+    "version": "1.0.0",
+    "description": "JFF discord bot",
+    "main": "bot.js",
+    "author": {
+        "name": "ExpletoryOrb"
+    },
+    "dependencies": {
+        "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+        "winston": "^3.1.0"
+    }
+}
