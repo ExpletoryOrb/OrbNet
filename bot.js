@@ -1,7 +1,6 @@
 const Discord = require('Discord.js');
 const client = new Discord.Client();
 
-const config = require('./config.json');
 const {prefix,token} = require('./config.json');
 
 var channelIdList = [
