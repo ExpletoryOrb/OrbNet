@@ -1,41 +1,53 @@
-var Discord = require('Discord.io');
-var logger = require('winston');
-var auth = require('./auth.json');
+const Discord = require('Discord.js');
+const client = new Discord.Client();
 
-//configure logger settings 
-logger.remove(logger.transports.Console);
-logger.add(new logger.transports.Console, {
-    colorize: true
+const config = require('./config.json');
+const {prefix,token} = require('./config.json');
+
+var channelIdList = [
+    {name: 'introductions', id: '445985208240570369'},
+    {name: 'mtg-general', id: '291262363569618944'},
+    {name: 'off-topic', id: '445980791156113438'},
+    {name: 'judge-questions', id: '489477243974844437'},
+    {name: 'deckhelp', id: '445982373591515146'},
+    {name: 'mtg-arena', id: '497183549330292736'},
+    {name: 'videogames', id: '445980818175819806'},
+    {name: 'arguments', id: '445981701332795413'},
+    {name: 'scryfall', id: '452179984073883650'},
+    {name: 'orbnet', id: '523283864169480230'}
+];
+
+
+client.login(token);
+
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
 });
-logger.level = 'debug';
-// Initialize Discord Bot
-var bot = new Discord.Client({
-   token: auth.token,
-   autorun: true
-});
-bot.on('ready', function (evt) {
-    logger.info('Connected');
-    logger.info('Logged in as: ');
-    logger.info(bot.username + ' - (' + bot.id + ')');
+   
+
+client.on('message', msg => {
+    if(!msg.guild.available){return;}
+
+    if((msg.content.includes('[[') || msg.content.includes('!card')) && !(msg.content.includes('_')) && msg.channel.id == getChannelIdByName('mtg-general')){
+
+        msg.channel.send('Please use the '+getChannelName('scryfall')+' channel instead when looking up cards');
+    }else if(msg.content === `${prefix}ping`){
+        msg.channel.send('pong!');
+    }
 });
 
-bot.on('message: ', function (user, userID, channelID, message, evt){
-    // Our bot needs to know if it will execute a command
-    // It will listen for messages that will start with `!`
-    if (message.substring(0, 1) == '!') {
-        var args = message.substring(1).split(' ');
-        var cmd = args[0];
-       
-        args = args.splice(1);
-        switch(cmd) {
-            // !ping
-            case 'ping':
-                bot.sendMessage({
-                    to: channelID,
-                    message: 'Pong!'
-                });
-            break;
-            // Just add any case commands if you want to..
-         }
-     }
+/*
+client.on('guildMemberAdd', member => {
+    const channel = member.guild.channels.find(ch => ch.name === 'member-log');
+    if(!channel) return;
+    channel.send('Welcome to the server! ', $(member));
 });
+*/
+ 
+function getChannelIdByName(pString){
+    return channelIdList.find(obj => obj.name === pString).id
+};
+
+function getChannelName(pString){
+    return channelIdList.find(obj => obj.name === pString).name
+};
