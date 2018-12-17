@@ -16,6 +16,13 @@ var channelIdList = [
     {name: 'orbnet', id: '523283864169480230'}
 ];
 
+//{name: `${prefix}help`, action: ``},
+var allCommands = [
+    {command: `${prefix}help`, desc: `Displays available commands`},
+    {command: `${prefix}ping`, desc: `Pings the bot`},
+    {command: `${prefix}daddy`, desc: `Summons the Viking Knight`},
+];
+
 
 client.login(token);
 
@@ -23,16 +30,40 @@ client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
    
+/*
+if(msg.content === `${prefix}MESSAGE`)
+*/
+
 try {
     client.on('message', msg => {
-        if(!msg.guild.available){return;}
+        //if(!msg.guild.available){return;}
 
-        if((msg.content.includes('[[') || msg.content.includes('!card')) && !(msg.content.includes('_')) && msg.channel.id == getChannelIdByName('mtg-general')){
+        /*if((msg.content.includes('[[') || msg.content.includes('!card')) && !(msg.content.includes('_')) && msg.channel.id == getChannelIdByName('mtg-general')){
+            msg.reply(' Please use the '+getChannelName('scryfall')+' channel instead when looking up cards');
+            return;
+        }*/
 
-           msg.channel.send('Please use the '+getChannelName('scryfall')+' channel instead when looking up cards');
-        }else if(msg.content === `${prefix}ping`){
-            msg.channel.send('pong!');
+        if (msg.author == client.user) {
+            return;
         }
+
+        if(msg.content.substring(0,5) === `${prefix}help`){
+            msg.author.send(`the available commands are: \n`+getAllCommandsInfo())
+            return;
+        }
+
+        if(msg.content.substring(0,5) === `${prefix}ping`){
+            msg.channel.send('pong!');
+            return;
+        }
+
+        if(msg.content.substring(0,6) === `${prefix}daddy`){
+            let  user = client.users.get('232479102831951872');
+            msg.reply(`Tread carefully, you are summoning: ${user}`);
+            return;
+        }
+
+
     });
 
 } catch (error) {
@@ -54,3 +85,11 @@ function getChannelIdByName(pString){
 function getChannelName(pString){
     return channelIdList.find(obj => obj.name === pString).name
 };
+
+function getAllCommandsInfo(){
+    let tempString = '';
+    allCommands.forEach(x => {
+        tempString += '\n '+x.command+' - '+x.desc+'\n';
+    });
+    return (tempString == null) ? 'no commands currently available' : tempString;
+}
