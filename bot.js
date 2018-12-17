@@ -23,17 +23,21 @@ client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
    
+try {
+    client.on('message', msg => {
+        if(!msg.guild.available){return;}
 
-client.on('message', msg => {
-    if(!msg.guild.available){return;}
+        if((msg.content.includes('[[') || msg.content.includes('!card')) && !(msg.content.includes('_')) && msg.channel.id == getChannelIdByName('mtg-general')){
 
-    if((msg.content.includes('[[') || msg.content.includes('!card')) && !(msg.content.includes('_')) && msg.channel.id == getChannelIdByName('mtg-general')){
+           msg.channel.send('Please use the '+getChannelName('scryfall')+' channel instead when looking up cards');
+        }else if(msg.content === `${prefix}ping`){
+            msg.channel.send('pong!');
+        }
+    });
 
-        msg.channel.send('Please use the '+getChannelName('scryfall')+' channel instead when looking up cards');
-    }else if(msg.content === `${prefix}ping`){
-        msg.channel.send('pong!');
-    }
-});
+} catch (error) {
+    console.log('could not interpret message');
+}
 
 /*
 client.on('guildMemberAdd', member => {
