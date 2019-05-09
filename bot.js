@@ -88,7 +88,7 @@ try {
         try{
             command.execute(message,args);
         } catch (error) {
-            console.log('could not execute that command');
+            console.log('could not execute that command error.msg: '+error.message);
             message.reply('there was an error executing that command!');
         }
     });
