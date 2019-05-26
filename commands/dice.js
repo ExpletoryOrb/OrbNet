@@ -47,7 +47,7 @@ module.exports = {
             resText += result[i].toString() + ', ';
         }
 
-        resText.trim(',');
+        resText = resText.slice(0,-1);
         if (sum > 0 && numberOfRolls > 0) avg = Math.round((sum / numberOfRolls) * 100) / 100;
 
         message.channel.send(`${text} sum: ${sum}, average: ${avg}, rolls: ${resText.substring(0, showLongRes ? 5000 : 200)}.`);
