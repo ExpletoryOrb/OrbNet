@@ -7,7 +7,7 @@ module.exports = {
     args: true,
     guildOnly: false,
     aliases: ['klan'],
-    usage: '[command name] <clan number/tag> <show player info true/false>',
+    usage: '<clan number/tag> <show player info true/false>',
     execute(message, args) {
         let data = [];
         if (args[0]) {
@@ -38,11 +38,11 @@ function handleResponse(json, data, message, args) {
     data.push(`Namn: ${json.tag}`);
     data.push(`Land: ${json.country}`);
     data.push(`Logga: ${json.logo}`);
-    data.push(`Hemsida: ${json.website}`);
-    data.push(`Twitter: ${json.twitter}`);
+    data.push(`Hemsida: ${json.website != undefined ? json.website : '-'}`);
+    data.push(`Twitter: ${json.twitter  != undefined ? json.twitter : '-'}`);
 
     var playerString = "\n";
-    if (args[1]) {
+    if (args[1] && (args[1] === 'yes' ||  args[1] === 'ja' ||  args[1] === 'true' || args[1] === 'sant')) {
         playerString += `Spelare:\n`;
         json.players.forEach(player => {
             playerString += ` Nickname: ${player.nickname}`;
@@ -58,6 +58,5 @@ function handleResponse(json, data, message, args) {
             playerString += `\n`;
         });
     }
-
     message.channel.send(`${data.join("\n") + playerString}`);
 }
